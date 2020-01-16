@@ -1,7 +1,9 @@
 class Tiempo:
     """
-    Versión 1.0
+    Versión 2.0
     Primer ejercicio de POO en Python.
+    Autor: Manuel Hidalgo Pérez
+    Fecha: 14-01-2020
     """
 
     def __init__(self, horas, minutos, segundos):
