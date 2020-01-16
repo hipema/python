@@ -1,7 +1,12 @@
 class Fraccion:
     """
-    Versión 1.0
+    Versión 2.0
     Ejercicio POO Fracción.
+    Falla en la función de simplificar fracción.
+
+    Cambios pendientes
+    - Reorganizar para colocar el método estático para obtener "fracciones" como cadena
+    - Nueva función para simplificar fracción, probablemente hacer una relacionada con el mcd.
     """
     def __init__(self, numerador, denominador):
         self.__numerador = 1
@@ -76,6 +81,26 @@ class Fraccion:
         self.__denominador = self.__denominador * otra.__denominador
         return str(self.__numerador)+"/"+str(self.__denominador)
 
+    # la función para simplificar la fracción no consigo sacarle una formulación para determinarla,
+    # cuando se puede simplicar hasta quedar 1 bien en el denominador o en el numerador no hay problema, pero no
+    # al contrario.
+    def simplificar_fraccion(self):
+        if self.__denominador < self.__numerador:
+            if self.__numerador % self.__denominador == 0:
+                self.__numerador = self.__numerador // self.__denominador
+                self.__denominador = 1
+            else:
+                divisor = (self.__numerador%self.__denominador)
+                self.__numerador = self.__numerador//divisor
+                self.__denominador = self.__denominador//divisor
+        if self.__denominador > self.__numerador:
+            if self.__denominador % self.__numerador == 0:
+                self.__denominador = self.__denominador // self.__numerador
+                self.__numerador = 1
+            else:
+                self.__denominador = (self.__denominador%self.__numerador)
+                self.__numerador = (self.__denominador%self.__numerador)
+
     @staticmethod
     def comprueba_denominador(value):
         return type(value) == type(1) and value != 0
@@ -85,6 +110,7 @@ class Fraccion:
         return type(value) ==  type(1)
 
 if __name__ == "__main__":
+    """
     print("Creamos fracción 12/36:")
     f1 = Fraccion(12,36)
 
@@ -122,10 +148,16 @@ if __name__ == "__main__":
     print(f"Suma de resultados es: {f3.obtener_resultado()+f4.obtener_resultado()}")
     print(f"La fracción resultante es {f3.sumar_fracciones(f4)}, cuyo resultado es {f3.obtener_resultado()}")
 
-    print("Restar dos fracciones (3/4) y (2/3)")
-    f3 = Fraccion(3, 4)
+    print("Restar dos fracciones (18/4) y (2/3)")
+    f3 = Fraccion(18, 4)
     f4 = Fraccion(2, 3)
     print(f"Resultado de fracción1: {f3.obtener_resultado()}")
     print(f"Resultado de fracción2: {f4.obtener_resultado()}")
     print(f"Resta de resultados es: {f3.obtener_resultado() - f4.obtener_resultado()}")
     print(f"La fracción resultante es {f3.restar_fracciones(f4)}, cuyo resultado es {f3.obtener_resultado()}")
+    """
+
+    f5 = Fraccion(2100, 180)
+    print(f"Fracción es (2100/180), cuyo resultado es {f5.obtener_resultado()}")
+    f5.simplificar_fraccion()
+    print(f"Simplificamos fracción resultando {f5.obtener_fraccion()} cuyo resultado es {f5.obtener_resultado()}")
