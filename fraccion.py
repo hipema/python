@@ -110,7 +110,6 @@ class Fraccion:
         return type(value) ==  type(1)
 
 if __name__ == "__main__":
-    """
     print("Creamos fracción 12/36:")
     f1 = Fraccion(12,36)
 
@@ -155,7 +154,6 @@ if __name__ == "__main__":
     print(f"Resultado de fracción2: {f4.obtener_resultado()}")
     print(f"Resta de resultados es: {f3.obtener_resultado() - f4.obtener_resultado()}")
     print(f"La fracción resultante es {f3.restar_fracciones(f4)}, cuyo resultado es {f3.obtener_resultado()}")
-    """
 
     f5 = Fraccion(2100, 180)
     print(f"Fracción es (2100/180), cuyo resultado es {f5.obtener_resultado()}")
