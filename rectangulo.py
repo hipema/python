@@ -162,7 +162,7 @@ class Rectangulo:
         return self.area() == other.area()
 
 if __name__ == "__main__":
-    r1 = Rectangulo(4, 1)
+    r1 = Rectangulo(8, 1)
     r2 = Rectangulo(3, 2)
     print(f"Probamos clase rectángulo con r1: ({r1.base},{r1.altura}) y "
           f"r2: ({r2.base},{r2.altura})\n")
@@ -180,7 +180,7 @@ if __name__ == "__main__":
     print("Rectángulos creados", Rectangulo.num_rectangulos())
 
     print("Eliminamos el rectángulo 1")
-    r1.__del__()
-
+    del r1
+    # print(r1) si lo ponemos visto, daría error porque ya se ha borrado el objeto.
     print("Multiplicamos el r2 * 2")
     print(2*r2)

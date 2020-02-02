@@ -63,43 +63,44 @@ class Fraccion:
 
     def multiplica_numero(self, numero):
         self.__numerador = self.__numerador * numero
-        self.__denominador = self.__denominador * numero
+        self.simplificar_fraccion()
         return str(self.__numerador)+"/"+str(self.__denominador)
 
     def multiplica_fracciones (self, otra):
         self.__numerador = self.__numerador * otra.__numerador
         self.__denominador = self.__denominador * otra.__denominador
+        self.simplificar_fraccion()
         return str(self.__numerador)+"/"+str(self.__denominador)
 
     def sumar_fracciones (self,otra):
         self.__numerador = (self.__numerador * otra.__denominador)+(otra.__numerador * self.__denominador)
         self.__denominador = self.__denominador * otra.__denominador
+        self.simplificar_fraccion()
         return str(self.__numerador)+"/"+str(self.__denominador)
 
     def restar_fracciones (self,otra):
         self.__numerador = (self.__numerador * otra.__denominador)-(otra.__numerador * self.__denominador)
         self.__denominador = self.__denominador * otra.__denominador
+        self.simplificar_fraccion()
         return str(self.__numerador)+"/"+str(self.__denominador)
 
-    # la función para simplificar la fracción no consigo sacarle una formulación para determinarla,
-    # cuando se puede simplicar hasta quedar 1 bien en el denominador o en el numerador no hay problema, pero no
-    # al contrario.
-    def simplificar_fraccion(self):
-        if self.__denominador < self.__numerador:
-            if self.__numerador % self.__denominador == 0:
-                self.__numerador = self.__numerador // self.__denominador
-                self.__denominador = 1
-            else:
-                divisor = (self.__numerador%self.__denominador)
-                self.__numerador = self.__numerador//divisor
-                self.__denominador = self.__denominador//divisor
-        if self.__denominador > self.__numerador:
-            if self.__denominador % self.__numerador == 0:
-                self.__denominador = self.__denominador // self.__numerador
-                self.__numerador = 1
-            else:
-                self.__denominador = (self.__denominador%self.__numerador)
-                self.__numerador = (self.__denominador%self.__numerador)
+    def mcd(self):
+        dividendo = self.__numerador
+        divisor = self.__denominador
+        resto = dividendo%divisor
+        while resto != 0:
+            dividendo = divisor
+            divisor = resto
+            resto = dividendo%divisor
+        return divisor
+
+    def simplificar_fraccion (self):
+        divisor = self.mcd()
+        self.__numerador = int (self.__numerador/divisor)
+        self.__denominador = int (self.__denominador/divisor)
+
+    def __str__(self):
+        return f"{self.__numerador} / {self.__denominador}"
 
     @staticmethod
     def comprueba_denominador(value):
@@ -135,10 +136,6 @@ if __name__ == "__main__":
     f2 = Fraccion(3,6)
     print(f"La fracción resultante es {f1.multiplica_fracciones(f2)}")
 
-    print("Restar fracción por otra fracción (3/6):")
-    f2 = Fraccion(3, 6)
-    print(f"La fracción resultante es {f1.multiplica_fracciones(f2)}")
-
     print("Sumar dos fracciones (3/4) y (2/3)")
     f3 = Fraccion(3,4)
     f4 = Fraccion(2,3)
@@ -159,3 +156,5 @@ if __name__ == "__main__":
     print(f"Fracción es (2100/180), cuyo resultado es {f5.obtener_resultado()}")
     f5.simplificar_fraccion()
     print(f"Simplificamos fracción resultando {f5.obtener_fraccion()} cuyo resultado es {f5.obtener_resultado()}")
+
+    print(f5)
