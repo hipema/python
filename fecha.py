@@ -6,12 +6,12 @@ class Fecha:
     Ejemplo: El 15 de diciembre de 2019 sería: "20191215"
     Colección de funciones:
     -1. fecha_correcta: dice si la fecha que se pasa como parámetro es correcta.
-    2. fecha_mas_1dia: suma un día a la fecha que se pasa como parámetro y lo devuelve.
-    3. fecha_mas_ndias: suma una serie de días a la fecha que se pasa como parámetro y lo devuelve.
-    4. fecha_menos_1dia: resta un día a la fecha que se pasa como parámetro y lo devuelve.
-    5. fecha_menos_ndias: resta una serie de días a la fecha que se pasa como parámetro y lo devuelve.
+    -2. fecha_mas_1dia: suma un día a la fecha que se pasa como parámetro y lo devuelve.
+    -3. fecha_mas_ndias: suma una serie de días a la fecha que se pasa como parámetro y lo devuelve.
+    -4. fecha_menos_1dia: resta un día a la fecha que se pasa como parámetro y lo devuelve.
+    -5. fecha_menos_ndias: resta una serie de días a la fecha que se pasa como parámetro y lo devuelve.
     -6. es_bisiesto: dice si la fecha que se pasa como parámetro es bisiesto.
-    7. compara_fechas: recibe dos fechas y devuelve un valor negativo si la 1ª es anterior a la
+    -7. compara_fechas: recibe dos fechas y devuelve un valor negativo si la 1ª es anterior a la
       segunda, cero si son iguales, y un valor positivo si la 1ª es posterior a la segunda.
     -8. fecha_formateada: recibe un fecha y devuelve una cadena con el formato:
       DD de {MES} de AAAA     (Ejemplo: "15 de Diciembre de 2019")
@@ -112,6 +112,15 @@ class Fecha:
             self.restar_dia()
             i += 1
 
+    def fecha_numerica (self):
+        return int(f"{self.anyo}{self.mes}{self.dia}")
+
+    # Compara fechas
+    def compara_fechas (self, otra):
+        fecha1 = (int)(f"{self.anyo}{self.mes}{self.dia}")
+        fecha2 = (int)(f"{otra.anyo}{otra.mes}{otra.dia}")
+        return fecha1 - fecha2
+
     # Métodos estáticos (de la clase)
     @staticmethod
     def fecha_correcta (dia, mes, anyo):
@@ -138,6 +147,28 @@ class Fecha:
     def __str__(self):
         return f"{self.dia} de {self.nombre_mes()} de {self.anyo}"
 
+    def __eq__(self, other):
+        """
+        Comprueba si una fecha es igual a otra.
+        :param other: objeto fecha recibido para la comprobación.
+        :return: devuelve verdadero o falso.
+        """
+        return self.compara_fechas(other) == 0
+
+    def __lt__(self, other):
+        """
+        Comprueba si una fecha es menor que otra.
+        :param other: objeto fecha recibido para la comprobación.
+        :return: devuelve verdadero o falso
+        """
+        return self.compara_fechas(other) < 0
+
+    def __add__(self, value):
+        return self.sumar_n_dias(value)
+
+    def __sub__(self, value):
+        return self.restar_n_dias(value)
+
 # Probamos la clase.
 if __name__ == "__main__":
     f1 = Fecha(5, 2, 2020)
@@ -158,3 +189,19 @@ if __name__ == "__main__":
     print("Restamos 59 dias a la fecha")
     f1.restar_n_dias(60)
     print(f1)
+
+    print("Sumamos 5 días a f1")
+    f1+5
+    print(f1)
+
+    print("Restamos 5 días a f1")
+    f1-5
+    print(f1)
+
+    print("Comparamos fecha1 (01-02-2009) y fecha2 (02-03-2005")
+    f1 = Fecha(1,2,2010)
+    f2 = Fecha(1,2,2009)
+    print("Comparamos fechas:")
+    print(f"El resultado es: {f1.compara_fechas(f2)}")
+
+    print(f"¿Es mayor f1 que f2?: {f1>f2}")
