@@ -16,6 +16,12 @@ class Fecha:
     -8. fecha_formateada: recibe un fecha y devuelve una cadena con el formato:
       DD de {MES} de AAAA     (Ejemplo: "15 de Diciembre de 2019")
     -9. año, mes, dia, nombre_mes: recibe un fecha y devuelve esos valores.
+
+    MODIFICACIONES: cambiamos los métodos de de sumar, y restar días para ponerlos privados.
+                    las funciones de sumar y restar días debe devolver nuevos objetos, no modificar los valores
+                    del actual.
+                    Eliminamos funciones de sumar y restar n días al sobrecargar operadores.
+
     """
 
 # Variables.
@@ -62,55 +68,35 @@ class Fecha:
         return meses[self.__mes - 1]
 
     # Sumar un día
-    def sumar_dia (self):
-        dias_mes = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-        if Fecha.es_bisiesto(self.anyo):
-            dias_mes[1] = 29
-        ultimo_dia_mes = dias_mes[self.mes-1]
-        dia = self.dia
+    def __sumar_dia (self):
+        """
+        Suma un día a la fecha.
+        :return: Fecha almacenada + 1 día.
+        """
+        dia = self.dia +1
         mes = self.mes
-        dia += 1
-        if dia > ultimo_dia_mes:  # mes siguiente si no es 29/2 y bisiesto
+        anyo = self.anyo
+        if dia > Fecha.dias_mes(self.__mes, self.__anyo): # mes siguiente si no es 29/2 y bisiesto
             # mes siguiente
             dia = 1
             mes += 1
             if mes > 12:  # nos pasamos de diciembre, año siguiente
                 mes = 1
-                self.anyo += 1
-        self.dia = dia
-        self.mes = mes
-
-    # Sumar n días a fecha.
-    def sumar_n_dias (self, value):
-        i = 0
-        while i < value:
-            self.sumar_dia()
-            i +=1
+                anyo += 1
+        return Fecha(dia, mes, anyo)
 
     # Restar un día a fecha.
-    def restar_dia (self):
-        dias_mes = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-        if Fecha.es_bisiesto(self.anyo):
-            dias_mes[1] = 29
-        dia = self.dia
+    def __restar_dia (self):
+        dia = self.dia -1
         mes = self.mes
-        dia -= 1
+        anyo = self.anyo
         if dia == 0:
             mes -= 1
             if mes < 1:  # pasamos de enero, a diciembre.
                 mes = 12
-                self.anyo -= 1
-                dia = dias_mes[mes-1]
-            dia = dias_mes[mes-1]
-        self.mes = mes
-        self.dia = dia
-
-    # Restar n días a fecha.
-    def restar_n_dias (self, value):
-        i = 0
-        while i < value:
-            self.restar_dia()
-            i += 1
+                anyo -= 1
+            dia = Fecha.dias_mes(mes,anyo)
+        return Fecha(dia, mes, anyo)
 
     def fecha_numerica (self):
         return int(f"{self.anyo}{self.mes}{self.dia}")
@@ -135,10 +121,18 @@ class Fecha:
         if mes < 1 or mes > 12:
             return False
         # dia correcto
-        dias_mes = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+        return 0 < dia <= Fecha.dias_mes(mes, anyo) # dia > 0 and dia <= dias_mes[mes-1]
+
+    @staticmethod
+    def dias_mes(mes, anyo):
+        """
+        Devuelve el número de días que tiene el mes actual.
+        :return:
+        """
+        dias_mes_ = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
         if Fecha.es_bisiesto(anyo):
-            dias_mes[1] = 29
-        return 0 < dia <= dias_mes[mes - 1] # dia > 0 and dia <= dias_mes[mes-1]
+            dias_mes_[1] = 29
+        return dias_mes_[mes - 1]
 
     def es_bisiesto (anyo):
         return anyo % 400 == 0 or (anyo % 4 == 0 and anyo % 100 != 0)
@@ -164,10 +158,22 @@ class Fecha:
         return self.compara_fechas(other) < 0
 
     def __add__(self, value):
-        return self.sumar_n_dias(value)
+        fecha = self
+        for i in range (value):
+            fecha = fecha.__sumar_dia()
+        return fecha
+
+    def __radd__(self, value):
+        return self + value
 
     def __sub__(self, value):
-        return self.restar_n_dias(value)
+        fecha = self
+        for i in range (value):
+            fecha = fecha.__restar_dia()
+        return fecha
+
+    def __rsub__(self, value):
+        return self + value
 
 # Probamos la clase.
 if __name__ == "__main__":
@@ -175,28 +181,22 @@ if __name__ == "__main__":
     print(f1)
 
     print("Sumamos un día a la fecha")
-    f1.sumar_dia()
-    print(f1)
+    print(f1+1)
 
     print("Sumamos 24 día al mes")
-    f1.sumar_n_dias(24)
-    print(f1)
+    print(f1+24)
 
     print("Restamos 1 día a la fecha")
-    f1.restar_dia()
-    print(f1)
+    print(f1-1)
 
     print("Restamos 59 dias a la fecha")
-    f1.restar_n_dias(60)
-    print(f1)
+    print(f1-59)
 
     print("Sumamos 5 días a f1")
-    f1+5
-    print(f1)
+    print(f1+5)
 
     print("Restamos 5 días a f1")
-    f1-5
-    print(f1)
+    print(f1-5)
 
     print("Comparamos fecha1 (01-02-2009) y fecha2 (02-03-2005")
     f1 = Fecha(1,2,2010)
