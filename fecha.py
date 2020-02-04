@@ -172,9 +172,6 @@ class Fecha:
             fecha = fecha.__restar_dia()
         return fecha
 
-    def __rsub__(self, value):
-        return self + value
-
 # Probamos la clase.
 if __name__ == "__main__":
     f1 = Fecha(5, 2, 2020)
