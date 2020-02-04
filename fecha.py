@@ -159,18 +159,20 @@ class Fecha:
 
     def __add__(self, value):
         fecha = self
-        for i in range (value):
-            fecha = fecha.__sumar_dia()
+        if value > 0:
+            for i in range (value):
+                fecha = fecha.__sumar_dia()
+
+        else:
+            for i in range (abs(value)):
+                fecha = fecha.__restar_dia()
         return fecha
 
     def __radd__(self, value):
         return self + value
 
     def __sub__(self, value):
-        fecha = self
-        for i in range (value):
-            fecha = fecha.__restar_dia()
-        return fecha
+        return self + -1*value
 
 # Probamos la clase.
 if __name__ == "__main__":
