@@ -137,9 +137,23 @@ class Fecha:
     def es_bisiesto (anyo):
         return anyo % 400 == 0 or (anyo % 4 == 0 and anyo % 100 != 0)
 
+    def clona (self):
+        """
+        :return: devuelve una copia de self.
+        """
+        return Fecha(self.dia,self.mes, self.anyo)
+
     # Sobrecarga
     def __str__(self):
         return f"{self.dia} de {self.nombre_mes()} de {self.anyo}"
+
+    def __le__(self, other):
+        """
+        Comprueba si una fecha es igual o menor a otra.
+        :param objeto fecha recibido para la comprobación.
+        :return: devuelve verdadero o falso.
+        """
+        return self.compara_fechas(other) <= 0
 
     def __eq__(self, other):
         """
@@ -166,8 +180,10 @@ class Fecha:
         # En caso de darle valor 0, al no entrar en el bucle, no se asigna el valor de un nuevo objeto, sino que sigue
         # referenciando al mismo objeto, con lo que si posteriormente hacemos un cambio en uno, se le hará al otro también.
 
-        fecha = Fecha(self.dia, self.mes, self.anyo) # esto crea un nuevo objeto y por tanto dos referencias distintas.
-        
+        #fecha = Fecha(self.dia, self.mes, self.anyo) # esto crea un nuevo objeto y por tanto dos referencias distintas.
+        fecha = self.clona()    # Realizamos una copia utilizando clona, sería equivalente a la línea anterior, pero
+                                # hemos preparado una función por si se quisiera utilizar en algún lugar más.
+
         if value > 0:
             for i in range (value):
                 fecha = fecha.__sumar_dia()
