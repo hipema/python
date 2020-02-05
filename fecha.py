@@ -158,7 +158,16 @@ class Fecha:
         return self.compara_fechas(other) < 0
 
     def __add__(self, value):
-        fecha = self
+
+        #fecha = self
+        # Hay que tener cuidado al utilizar esta expresión, ya que si la función fecha.__sumar_dia modificase el valor,
+        # en vez de devolver un nuevo objeto, estaríamos variando el valor del objeto inicial también, ya que se hace
+        # una copia al valor por referencia, para evitar esto, también se podría realizar del siguiente modo.
+        # En caso de darle valor 0, al no entrar en el bucle, no se asigna el valor de un nuevo objeto, sino que sigue
+        # referenciando al mismo objeto, con lo que si posteriormente hacemos un cambio en uno, se le hará al otro también.
+
+        fecha = Fecha(self.dia, self.mes, self.anyo) # esto crea un nuevo objeto y por tanto dos referencias distintas.
+        
         if value > 0:
             for i in range (value):
                 fecha = fecha.__sumar_dia()
