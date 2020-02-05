@@ -21,6 +21,8 @@ class Fecha:
                     las funciones de sumar y restar días debe devolver nuevos objetos, no modificar los valores
                     del actual.
                     Eliminamos funciones de sumar y restar n días al sobrecargar operadores.
+                    Corregimos la función fecha numérica para que incluya los valores 01, 02, etc. tanto en el mes como
+                    en el día.
 
     """
 
@@ -99,12 +101,21 @@ class Fecha:
         return Fecha(dia, mes, anyo)
 
     def fecha_numerica (self):
-        return int(f"{self.anyo}{self.mes}{self.dia}")
+        cadena_fecha = f"{self.anyo}"
+        if self.mes < 10:
+            cadena_fecha = cadena_fecha+f"0{self.mes}"
+        else:
+            cadena_fecha = cadena_fecha+f"{self.mes}"
+        if self.dia <10:
+            cadena_fecha = cadena_fecha+f"0{self.dia}"
+        else:
+            cadena_fecha = cadena_fecha+f"{self.dia}"
+        return int(cadena_fecha)
 
     # Compara fechas
     def compara_fechas (self, otra):
-        fecha1 = (int)(f"{self.anyo}{self.mes}{self.dia}")
-        fecha2 = (int)(f"{otra.anyo}{otra.mes}{otra.dia}")
+        fecha1 = self.fecha_numerica()
+        fecha2 = otra.fecha_numerica()
         return fecha1 - fecha2
 
     # Métodos estáticos (de la clase)
@@ -222,9 +233,9 @@ if __name__ == "__main__":
     print("Restamos 5 días a f1")
     print(f1-5)
 
-    print("Comparamos fecha1 (01-02-2009) y fecha2 (02-03-2005")
+    print("Comparamos fecha1 (01-02-2009) y fecha2 (02-03-2005)")
     f1 = Fecha(1,2,2010)
-    f2 = Fecha(1,2,2009)
+    f2 = Fecha(1,12,2009)
     print("Comparamos fechas:")
     print(f"El resultado es: {f1.compara_fechas(f2)}")
 
