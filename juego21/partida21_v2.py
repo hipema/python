@@ -14,9 +14,9 @@ partida = Reglas21()
 partida.alta_jugadores(int(input('¿Cuántos jugadores son? ')))
 
 # Listado de jugadores que participan
-print(f'\nListamos los jugadores: ')
-print(f'----------------------- ')
-partida.listado_jugadores()
+#print(f'\nListamos los jugadores: ')
+#print(f'----------------------- ')
+#partida.listado_jugadores()
 
 # Tirar 1 dado
 partida.tirar_todos_un_dado()
@@ -31,18 +31,34 @@ for i in range (partida.num_jugadores):
     print(f'Jugador {i+1}: {partida.resultado_ronda[i]}')
 
 # Comprobamos la función "Buscar empatados"
-print(f'\nBuscar empatados con valor máximo: ')
-print(f'---------------------------------')
-partida.buscar_empatados()
+print(f'\nMostrar empatados: ')
+print(f'----------------')
 # Mostramos los empatados con el valor máximo.
 partida.mostrar_empatados()
-
+#partida.desempatar_apertura()
+partida.mostrar_resultados_empatados()
+"""
+# Desempatar
+print(f'\nRealizamos rondas hasta desempatar y sólo quedar uno: ')
+print(f'-----------------------------------------------------')
+partida.desempatar_apertura()
+partida.mostrar_empatados()
+partida.mostrar_resultados_empatados()
+"""
+"""
 # Tira un dado los empatados
 print(f'\nMostramos resultado de tirada empatados con 1 dado: ')
 print(f'--------------------------------------------------')
 partida.empatados_un_dado()
-
 partida.resultado_ronda_dados()
+partida.mostrar_resultados_empatados()
+
+
+# Desempatar
+print(f'\nRealizamos rondas hasta desempatar y sólo quedar uno: ')
+print(f'-----------------------------------------------------')
+partida.desempatar_apertura()
+partida.mostrar_resultados_empatados()
 
 
 # Reseteamos contadores de ronda
@@ -63,3 +79,4 @@ for i in range (partida.num_jugadores):
 print(f'\nSorteamos los turnos de tirada: ')
 print(f'------------------------------ ')
 #partida.sorteo_turnos()
+"""
