@@ -106,6 +106,10 @@ class Jugadores21:
         print(f'Has superado el límite de 21, quedas eliminado automáticamente.')
         return self.resultado_ronda
 
+    # Sobrecargamos métodos
+    def __str__(self):
+        return f'{self.nombre}'
+
 if __name__ == "__main__":
     j1 = Jugadores21("Manolo")
     j2 = Jugadores21("Pepe")
