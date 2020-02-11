@@ -75,8 +75,12 @@ class Reglas21:
             self.jugadores_empatados = empatados
 
     def mostrar_empatados(self):
-        for i in range (len(self.__jugadores_empatados)):
-            print(f'{self.__jugadores_empatados[i]}')
+        self.buscar_empatados()
+        if (len(self.__jugadores_empatados)) == 1:
+            self.ganador_ronda()
+        else:
+            for i in range (len(self.__jugadores_empatados)):
+                print(f'{self.__jugadores_empatados[i]}')
 
     def tirar_todos_un_dado (self):
         for i in range (self.num_jugadores):
@@ -101,6 +105,39 @@ class Reglas21:
         self.resetear_resultado_ronda()
         for i in range (len(self.__jugadores_empatados)):
             self.jugadores_empatados[i].tirada_un_dado()
+
+    def mostrar_resultados_empatados (self):
+        """
+        Función para mostrar el resultado tras un lanzamiento de los jugadores empatados.
+        :return:
+        """
+        if len(self.jugadores_empatados) == 1:
+            print(end="")
+        else:
+            for i in range(len(self.jugadores_empatados)):
+                if self.jugadores_empatados[i].resultado_ronda == 0:
+                    print(end="")
+                else:
+                    print(f'Jugador {i + 1}: {self.resultado_ronda[i]}')
+
+    # Pendiente comprobar esta función
+    def desempatar_apertura (self):
+        self.buscar_empatados()
+        i = len(self.jugadores_empatados)
+        while i > 1:
+            print('Nuevo lanzamiento')
+            self.empatados_un_dado()
+            self.buscar_empatados()
+            self.mostrar_resultados_empatados()
+            i = len(self.jugadores_empatados)
+            self.resetear_resultado_ronda()
+
+    def ganador_ronda (self):
+        if len(self.jugadores_empatados) == 1:
+            print(f'Máxima puntuación {self.jugadores_empatados[0].nombre}')
+            self.jugadores_empatados[0].sumar_victoria()
+        else:
+            print('Aún no hay un ganador, varios jugadores  están empatados.')
 
     """
     Debemos seguir desarrollando las funciones, ahora para realizarlas con los jugadores en caso de empate
