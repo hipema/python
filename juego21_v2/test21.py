@@ -1,6 +1,12 @@
 """
 El 21 en Dados. Utilizamos la clase dado y dados realizadas por Rafael del Castillo.
 
+@author: Manuel Hidalgo Pérez, David Pérez Ruiz
+@date: 28 Febrero 2020
+@version: 2.0
+
+Clases propias utilizadas: Partida21, Jugadores21
+
 Jugadores: 2 ó +
 
 Objetivo:
@@ -44,45 +50,47 @@ nuevamente aun cuando hayan llegado a 19. En esta situación es probable que se 
 con un total perdedor.
 
 """
+from github.juego21_v2.partida21 import Partida21
 
-"""
-Boceto para 
-mientras -- listado -- ir eliminando -- hasta quedar solo uno --
+# Comienza la partida, elegimos cantidad de Jugadores
+print('Bienvenido al JUEGO DEL 21.\n'
+      'Este juego consiste en tirar dados hasta aproximarse lo máximo posible al número 21\n'
+      'sin pasarse, si se pasa queda eliminado. Gana el jugador que más se acerque.')
+print('------------------------------------------------------------------------------------\n')
 
-Clases necesarias:
-    - dado
-    - dados
-    - jugadores: numero jugador, nombre, contador puntos ronda, contador victorias, dados.
-    - partida21:
-"""
+# Ejecutamos inicio de partida
+partida = Partida21()
 
-""" 
-Elegimos número de jugadores, asignamos nombres.
+# Elección número de jugadores y alta
+partida.alta_jugadores(int(input('¿Cuántos jugadores son? ')))
+print("")
 
-- Creamos dos dados para cada jugador y un contador punto ronda como de victorias.
 
-Comenzamos el juego
-- Cada jugador tira un dado y se acumula en contador punto ronda.
-    * Se selecciona los jugadores con el > contador punto ronda.
-    * Si hay empate, tiran un dado cada uno de los jugadores empatados.
-        Se selecciona los jugadores con el > contador punto ronda.
-    * Cuando sólo quede un jugador, ese será el que empezará la partida.
-    * Reordenaremos el número de salida para la partida, siendo el primero el que mayor puntuación haya obtenido, a partir
-        de ahí seguirá el orden ascendente, y se incluirá en el array al final los números del 1 hasta X.
-    
-- Tira el jugador X:
-    * Comprobamos puntuación de suma de los dos dados y añadimos al contador puntos ronda.
-    * Si puntuación es inferior a 14, debe elegir si volver a tirar o no (con los dos dados).
-        Si decide tirar se realiza la suma al contador puntos ronda.
-    * Si puntuación es 14 ó +, puede elegir si volver a tirar o no, pero con ún solo dado.
-        Si decide tirar se realiza la suma al contador puntos ronda.
-    * Cuando decide no volver a tirar (se planta) se guarda su contador puntos ronda y se pasa el turno al siguiente jugador.
-  
-- Repetimos proceso anterior con cada uno de los jugadores.
-- Finalizado el turno de todos los jugadores, se realiza la comprobación del ganador.
-    *   Jugador con > 21 puntos - pierde.
-    *   Si hay un jugador sólo con el contador puntos ronda más algo, gana directamente.
-        Si número de jugadores con puntuación más alta > 1 (Pasan al desempate)
-            - Se repite tirada entre los jugadores con más puntos.
-            - Una vez tiran todos los jugadores empatados, se vuelve a comprobar el resultado.
-"""
+rondas_totales = int(input('\n¿Cuantas rondas queréis jugar? '))
+print()
+print("Ver jugadores en orden inicial:")
+print("-------------------------------")
+print(partida)
+
+# Tirada inicial para selección de orden
+partida.ronda_inicial()
+
+print(f"\nVer jugadores ordenados:")
+print(f"-----------------------")
+print(partida)
+
+# Jugamos rondas
+for i in range (rondas_totales):
+    print(f"Ronda {i+1}:")
+    partida.jugar_ronda_todos()
+
+# Ver clasificación
+partida.ver_clasificacion()
+print()
+tirar = ""
+while tirar != "s" or tirar != "S" or tirar != "n" or tirar != "N":
+    tirar= input("¿Quieres jugar otra ronda? (s/n)")
+    if tirar == "s" or tirar == "S":
+        partida.jugar_ronda_todos()
+    elif tirar == "n" or tirar == "N":
+        print("Fin de partida, gracias por Jugar al 21")

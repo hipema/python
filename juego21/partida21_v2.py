@@ -12,7 +12,19 @@ partida = Reglas21()
 
 # Elección del número de jugadores
 partida.alta_jugadores(int(input('¿Cuántos jugadores son? ')))
+rondas_totales = int(input(print('¿Cuantas rondas queréis jugar?')))
 
+# Lanzariamos el sorteo de orden
+print(f'\nSe lanza un dado por jugador para determinar el orden de la partida.')
+print(f'--------------------------------------------------------------------')
+partida.orden_jugadores()
+
+ronda = 1
+while ronda < rondas_totales:
+    partida.jugar_ronda()
+    ronda +=1
+
+"""
 # Listado de jugadores que participan
 #print(f'\nListamos los jugadores: ')
 #print(f'----------------------- ')
@@ -37,7 +49,7 @@ print(f'----------------')
 partida.mostrar_empatados()
 #partida.desempatar_apertura()
 partida.mostrar_resultados_empatados()
-"""
+
 # Desempatar
 print(f'\nRealizamos rondas hasta desempatar y sólo quedar uno: ')
 print(f'-----------------------------------------------------')

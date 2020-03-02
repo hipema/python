@@ -60,7 +60,6 @@ class Reglas21:
     def buscar_empatados(self):
         self.__jugadores_empatados = list()
         maximo = 0
-        contador = 0
         empatados = list()
         for i in range (self.__num_jugadores):
             if maximo < self.__jugadores[i].resultado_ronda:
@@ -68,11 +67,7 @@ class Reglas21:
         for i in range (self.__num_jugadores):
             if maximo == self.__jugadores[i].resultado_ronda:
                 empatados.append(self.__jugadores[i])
-                contador += 1
-        if contador > 1:
-            self.jugadores_empatados = empatados
-        else:
-            self.jugadores_empatados = empatados
+        self.jugadores_empatados = empatados
 
     def mostrar_empatados(self):
         self.buscar_empatados()
@@ -139,10 +134,62 @@ class Reglas21:
         else:
             print('Aún no hay un ganador, varios jugadores  están empatados.')
 
+    def ronda_partida (self):
+        puntuacion = list()
+        maximo = 0
+        contador = 0
+        for i in range(self.num_jugadores):
+            # Se debe ir dando la opción de lanzar de nuevo los dados o plantarse.
+            # Primer lanzamiento
+            print(f'\nTurno de {self.jugadores[i].nombre}:')
+            puntuacion.append(self.jugadores[i].jugar_ronda())
+            if puntuacion[i] > maximo and puntuacion[i] <= 21:
+                maximo = puntuacion[i]
+
+        print('\nResultados de la tirada:')
+        for i in range(self.num_jugadores):
+            if puntuacion[i] > 21:
+                print(f'{self.jugadores[i].nombre}: {self.jugadores[i].resultado_ronda} - Eliminado')
+            else:
+                print(f'{self.jugadores[i].nombre}: {self.jugadores[i].resultado_ronda}')
+
+        for i in range(self.num_jugadores):
+            if maximo == puntuacion[i]:
+                contador += 1
+        empatados.clear()
+        while contador > 1:
+            print(f'\nRealizamos el desempate entre: ')
+            for i in range(self.num_jugadores):
+                if maximo == orden_correcto[i].resultado_ronda:
+                    print(f'{orden_correcto[i].nombre}')
+                    empatados.append(i)
+                orden_correcto[i].borrar_resultado()
+
+            auxiliar = contador
+            contador = 0
+            puntuacion.clear()
+            maximo = 0
+
+            for i in range(auxiliar):
+                print(f'\nTurno de {orden_correcto[empatados[i]].nombre}:')
+                puntuacion.append(orden_correcto[empatados[i]].jugar_ronda())
+                if maximo < puntuacion[i] < 21:
+                    maximo = puntuacion[i]
+            for i in range(numero_jugadores):
+                if maximo == len(puntuacion):
+                    contador += 1
+
+        for i in range(numero_jugadores):
+            if maximo == orden_correcto[i].resultado_ronda:
+                orden_correcto[i].sumar_victoria()
+                print(f'El ganador es: {orden_correcto[i].nombre}\n')
+            orden_correcto[i].borrar_resultado()
+
+        ronda += 1
+
     """
     Debemos seguir desarrollando las funciones, ahora para realizarlas con los jugadores en caso de empate
     """
-
 
     # Función para realizar el sorteo de los turnos y ordenar los jugadores.
     def sorteo_turnos(self):

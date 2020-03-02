@@ -1,0 +1,251 @@
+class FechaErronea(Exception): #creamos la excepción, como objeto heredado de la clase Exception
+    def __init__(self, mensaje_error):
+        Exception.__init__(self)
+        self.mensaje_error = mensaje_error
+
+class Fecha:
+    """
+    Creamos la clase Fecha para adaptarla al ejercicio de funciones realizado como exámen del primer Trimestre.
+    Colección de funciones para manejar fechas en cadenas de caracteres.
+    El formato de la cadena es: AAAAMMDD.
+    Ejemplo: El 15 de diciembre de 2019 sería: "20191215"
+    Colección de funciones:
+    -1. fecha_correcta: dice si la fecha que se pasa como parámetro es correcta.
+    -2. fecha_mas_1dia: suma un día a la fecha que se pasa como parámetro y lo devuelve.
+    -3. fecha_mas_ndias: suma una serie de días a la fecha que se pasa como parámetro y lo devuelve.
+    -4. fecha_menos_1dia: resta un día a la fecha que se pasa como parámetro y lo devuelve.
+    -5. fecha_menos_ndias: resta una serie de días a la fecha que se pasa como parámetro y lo devuelve.
+    -6. es_bisiesto: dice si la fecha que se pasa como parámetro es bisiesto.
+    -7. compara_fechas: recibe dos fechas y devuelve un valor negativo si la 1ª es anterior a la
+      segunda, cero si son iguales, y un valor positivo si la 1ª es posterior a la segunda.
+    -8. fecha_formateada: recibe un fecha y devuelve una cadena con el formato:
+      DD de {MES} de AAAA     (Ejemplo: "15 de Diciembre de 2019")
+    -9. año, mes, dia, nombre_mes: recibe un fecha y devuelve esos valores.
+
+    MODIFICACIONES: cambiamos los métodos de de sumar, y restar días para ponerlos privados.
+                    las funciones de sumar y restar días debe devolver nuevos objetos, no modificar los valores
+                    del actual.
+                    Eliminamos funciones de sumar y restar n días al sobrecargar operadores.
+                    Corregimos la función fecha numérica para que incluya los valores 01, 02, etc. tanto en el mes como
+                    en el día.
+
+    """
+
+# Variables.
+    #dia, mes, año
+# Constructor.
+    def __init__(self, dia, mes, anyo):
+        if not Fecha.fecha_correcta(dia, mes, anyo):
+            raise FechaErronea("Día, mes o año erróneo al construir la fecha") # lanzamos la excepción.
+        self.__dia = dia
+        self.__mes = mes
+        self.__anyo = anyo
+
+    # Propiedades
+    @property
+    def dia(self):
+        return self.__dia
+
+    @dia.setter
+    def dia(self, value):
+        if not Fecha.fecha_correcta(value, self.__mes, self.__anyo):
+            raise FechaErronea(f"Día asignado, {value}, incorrecto")  # lanzamos la excepción.
+        self.__dia = value
+
+    @property
+    def mes(self):
+        return self.__mes
+
+    @mes.setter
+    def mes(self, value):
+        if not Fecha.fecha_correcta(self.__dia, value, self.__anyo):
+            raise FechaErronea(f"Mes asignado, {value}, incorrecto")  # lanzamos la excepción.
+        self.__mes = value
+
+    @property
+    def anyo(self):
+        return self.__anyo
+
+    @anyo.setter
+    def anyo(self, value):
+        if not Fecha.fecha_correcta(self.__dia, self.__mes, value):
+            raise FechaErronea(f"Año asignado, {value}, incorrecto")  # lanzamos la excepción.
+        self.__anyo = value
+
+    # Métodos
+    def nombre_mes (self):
+        meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre",
+                 "Noviembre", "Diciembre"]
+        return meses[self.__mes - 1]
+
+    # Sumar un día
+    def __sumar_dia (self):
+        """
+        Suma un día a la fecha.
+        :return: Fecha almacenada + 1 día.
+        """
+        dia = self.dia +1
+        mes = self.mes
+        anyo = self.anyo
+        if dia > Fecha.dias_mes(self.__mes, self.__anyo): # mes siguiente si no es 29/2 y bisiesto
+            # mes siguiente
+            dia = 1
+            mes += 1
+            if mes > 12:  # nos pasamos de diciembre, año siguiente
+                mes = 1
+                anyo += 1
+        return Fecha(dia, mes, anyo)
+
+    # Restar un día a fecha.
+    def __restar_dia (self):
+        dia = self.dia -1
+        mes = self.mes
+        anyo = self.anyo
+        if dia == 0:
+            mes -= 1
+            if mes < 1:  # pasamos de enero, a diciembre.
+                mes = 12
+                anyo -= 1
+            dia = Fecha.dias_mes(mes,anyo)
+        return Fecha(dia, mes, anyo)
+
+    def fecha_numerica (self):
+        cadena_fecha = f"{self.anyo}"
+        if self.mes < 10:
+            cadena_fecha = cadena_fecha+f"0{self.mes}"
+        else:
+            cadena_fecha = cadena_fecha+f"{self.mes}"
+        if self.dia <10:
+            cadena_fecha = cadena_fecha+f"0{self.dia}"
+        else:
+            cadena_fecha = cadena_fecha+f"{self.dia}"
+        return int(cadena_fecha)
+
+    # Compara fechas
+    def compara_fechas (self, otra):
+        fecha1 = self.fecha_numerica()
+        fecha2 = otra.fecha_numerica()
+        return fecha1 - fecha2
+
+    # Métodos estáticos (de la clase)
+    @staticmethod
+    def fecha_correcta (dia, mes, anyo):
+        # tipo de dato correcto
+        if not isinstance(dia,int) or not isinstance(mes,int) or not isinstance(anyo,int): # sería igual a
+            # type(dia) != type(1) or type(mes) != type(1) or type(anyo) != type(1):
+            return False
+        # año correcto
+        if anyo < 0:
+            return False
+        # mes correcto
+        if mes < 1 or mes > 12:
+            return False
+        # dia correcto
+        return 0 < dia <= Fecha.dias_mes(mes, anyo) # dia > 0 and dia <= dias_mes[mes-1]
+
+    @staticmethod
+    def dias_mes(mes, anyo):
+        """
+        Devuelve el número de días que tiene el mes actual.
+        :return:
+        """
+        dias_mes_ = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+        if Fecha.es_bisiesto(anyo):
+            dias_mes_[1] = 29
+        return dias_mes_[mes - 1]
+
+    def es_bisiesto (anyo):
+        return anyo % 400 == 0 or (anyo % 4 == 0 and anyo % 100 != 0)
+
+    def clona (self):
+        """
+        :return: devuelve una copia de self.
+        """
+        return Fecha(self.dia,self.mes, self.anyo)
+
+    # Sobrecarga
+    def __str__(self):
+        return f"{self.dia} de {self.nombre_mes()} de {self.anyo}"
+
+    def __le__(self, other):
+        """
+        Comprueba si una fecha es igual o menor a otra.
+        :param objeto fecha recibido para la comprobación.
+        :return: devuelve verdadero o falso.
+        """
+        return self.compara_fechas(other) <= 0
+
+    def __eq__(self, other):
+        """
+        Comprueba si una fecha es igual a otra.
+        :param other: objeto fecha recibido para la comprobación.
+        :return: devuelve verdadero o falso.
+        """
+        return self.compara_fechas(other) == 0
+
+    def __lt__(self, other):
+        """
+        Comprueba si una fecha es menor que otra.
+        :param other: objeto fecha recibido para la comprobación.
+        :return: devuelve verdadero o falso
+        """
+        return self.compara_fechas(other) < 0
+
+    def __add__(self, value):
+
+        #fecha = self
+        # Hay que tener cuidado al utilizar esta expresión, ya que si la función fecha.__sumar_dia modificase el valor,
+        # en vez de devolver un nuevo objeto, estaríamos variando el valor del objeto inicial también, ya que se hace
+        # una copia al valor por referencia, para evitar esto, también se podría realizar del siguiente modo.
+        # En caso de darle valor 0, al no entrar en el bucle, no se asigna el valor de un nuevo objeto, sino que sigue
+        # referenciando al mismo objeto, con lo que si posteriormente hacemos un cambio en uno, se le hará al otro también.
+
+        #fecha = Fecha(self.dia, self.mes, self.anyo) # esto crea un nuevo objeto y por tanto dos referencias distintas.
+        fecha = self.clona()    # Realizamos una copia utilizando clona, sería equivalente a la línea anterior, pero
+                                # hemos preparado una función por si se quisiera utilizar en algún lugar más.
+
+        if value > 0:
+            for i in range (value):
+                fecha = fecha.__sumar_dia()
+
+        else:
+            for i in range (abs(value)):
+                fecha = fecha.__restar_dia()
+        return fecha
+
+    def __radd__(self, value):
+        return self + value
+
+    def __sub__(self, value):
+        return self + -1*value
+
+# Probamos la clase.
+if __name__ == "__main__":
+    f1 = Fecha(5, 20, 2020)
+    print(f1)
+
+    print("Sumamos un día a la fecha")
+    print(f1+1)
+
+    print("Sumamos 24 día al mes")
+    print(f1+24)
+
+    print("Restamos 1 día a la fecha")
+    print(f1-1)
+
+    print("Restamos 59 dias a la fecha")
+    print(f1-59)
+
+    print("Sumamos 5 días a f1")
+    print(f1+5)
+
+    print("Restamos 5 días a f1")
+    print(f1-5)
+
+    print("Comparamos fecha1 (01-02-2009) y fecha2 (02-03-2005)")
+    f1 = Fecha(1,2,2010)
+    f2 = Fecha(1,12,2009)
+    print("Comparamos fechas:")
+    print(f"El resultado es: {f1.compara_fechas(f2)}")
+
+    print(f"¿Es mayor f1 que f2?: {f1>f2}")

@@ -1,5 +1,11 @@
-from github.juego21.dados import DadoSimple
-from github.juego21.dado import Dado
+"""
+El 21 en Dados.
+@author: Manuel Hidalgo Pérez, David Pérez Ruiz
+@date: 28 Febrero 2020
+@version: 2.0
+"""
+
+from github.juego21_v2.dados import DadoSimple
 
 """
 Esta clase creará jugadores para el Juego de Dados "El 21".
@@ -75,7 +81,7 @@ class Jugadores21:
             lanzar = input(f'Opción no encontrada, pulse "A" para realizar su tirada. ')
         self.tirada_dos_dados()
         print(f'Resultado tirada: {self.resultado_dados}')
-        print(f'Resultado acumulado en esta ronda: {self.resultado_ronda}')
+        print(f'Resultado acumulado en esta ronda: {self.resultado_ronda}\n')
 
         while self.resultado_ronda < 14:
             lanzar = input (f'¿Deseas volver a lanzar? (si deseas Lanzar pulsa "A", si deseas plantarte pulsa "B" ')
@@ -84,27 +90,27 @@ class Jugadores21:
             if lanzar == "A" or lanzar == "a":
                 self.tirada_dos_dados()
                 print(f'Resultado de tirada: {self.resultado_dados}')
-                print(f'Resultado acumulado en esta ronda: {self.resultado_ronda}')
+                print(f'Resultado acumulado en esta ronda: {self.resultado_ronda}\n')
             else:
-                print(f'Resultado final de ronda: {self.resultado_ronda}')
+                print(f'Resultado final de ronda: {self.resultado_ronda}\n')
                 return self.resultado_ronda
         while self.resultado_ronda <= 21:
             if self.resultado_ronda == 21:
-                print(f'Has logrado la puntuación máxima.')
+                print(f'Has logrado la puntuación máxima.\n')
                 return self.resultado_ronda
-            print(f'Estás muy cerca del límite, a partir de ahora, tirarás con un único dado.')
+            print(f'Estás muy cerca del límite, a partir de ahora, tirarás con un único dado.\n')
             lanzar = input(f'¿Deseas volver a lanzar? (si deseas Lanzar pulsa "A", si deseas plantarte pulsa "B" ')
             while (lanzar != "A" and lanzar != "a" and lanzar != "B" and lanzar != "b"):
                 lanzar = input(f'Opción no encontrada, pulse "A" para realizar su tirada o "B" SI deseas plantarte. ')
             if lanzar == "A" or lanzar == "a":
                 self.tirada_un_dado()
                 print(f'Resultado de tirada: {self.resultado_dados}')
-                print(f'Resultado acumulado en esta ronda: {self.resultado_ronda}')
+                print(f'Resultado acumulado en esta ronda: {self.resultado_ronda}\n')
             else:
-                print(f'Resultado final de ronda: {self.resultado_ronda}')
+                print(f'Resultado final de ronda: {self.resultado_ronda}\n')
                 return self.resultado_ronda
 
-        print(f'Has superado el límite de 21, quedas eliminado automáticamente.')
+        print(f'Has superado el límite de 21, quedas eliminado automáticamente.\n')
         return self.resultado_ronda
 
     # Sobrecargamos métodos
@@ -133,41 +139,33 @@ if __name__ == "__main__":
     print(f'Volvemos a lanzar dos dados, la suma de los dados es: {j1.resultado_dados}')
     print(f'El resultado de la ronda es: {j1.resultado_ronda}')
 
-"""
-Clases necesarias:
-    - dado
-    - dados
-    - jugadores: numero jugador, nombre, contador puntos ronda, contador victorias, dados.
-    - partida21:
-"""
 
-""" 
-Elegimos número de jugadores, asignamos nombres.
+    # Sobrecarga de funciones
+    def __lt__(self, other):
+        """
+        Comprueba si jugador tiene menor puntuación que otro
+        :param other:
+        :return:
+        """
+        assert isinstance(other, Jugadores21)  # comprueba si other es un objeto Jugador21.
+        return self.__contador_victorias < other.contador_victorias
 
-- Creamos dos dados para cada jugador y un contador punto ronda como de victorias.
 
-Comenzamos el juego
-- Cada jugador tira un dado y se acumula en contador punto ronda.
-    * Se selecciona los jugadores con el > contador punto ronda.
-    * Si hay empate, tiran un dado cada uno de los jugadores empatados.
-        Se selecciona los jugadores con el > contador punto ronda.
-    * Cuando sólo quede un jugador, ese será el que empezará la partida.
-    * Reordenaremos el número de salida para la partida, siendo el primero el que mayor puntuación haya obtenido, a partir
-        de ahí seguirá el orden ascendente, y se incluirá en el array al final los números del 1 hasta X.
-    
-- Tira el jugador X:
-    * Comprobamos puntuación de suma de los dos dados y añadimos al contador puntos ronda.
-    * Si puntuación es inferior a 14, debe elegir si volver a tirar o no (con los dos dados).
-        Si decide tirar se realiza la suma al contador puntos ronda.
-    * Si puntuación es 14 ó +, puede elegir si volver a tirar o no, pero con ún solo dado.
-        Si decide tirar se realiza la suma al contador puntos ronda.
-    * Cuando decide no volver a tirar (se planta) se guarda su contador puntos ronda y se pasa el turno al siguiente jugador.
-  
-- Repetimos proceso anterior con cada uno de los jugadores.
-- Finalizado el turno de todos los jugadores, se realiza la comprobación del ganador.
-    *   Jugador con > 21 puntos - pierde.
-    *   Si hay un jugador sólo con el contador puntos ronda más algo, gana directamente.
-        Si número de jugadores con puntuación más alta > 1 (Pasan al desempate)
-            - Se repite tirada entre los jugadores con más puntos.
-            - Una vez tiran todos los jugadores empatados, se vuelve a comprobar el resultado.
-"""
+    def __le__(self, other):
+        """
+        Comprueba si un rectángulo es menor o igual a otro.
+        :param other:
+        :return:
+        """
+        assert isinstance(other, Jugadores21)
+        return self.__contador_victorias <= other.contador_victorias
+
+
+    def __eq__(self, other):
+        """
+        Comprueba si un rectángulo es igual a otro.
+        :param other:
+        :return:
+        """
+        assert isinstance(other, Jugadores21)
+        return self.__contador_victorias == other.contador_victorias

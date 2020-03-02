@@ -1,0 +1,3 @@
+Primera línea del fichero
+Segunda línea del fichero
+Esta es la tercera línea¿y esta donde va?

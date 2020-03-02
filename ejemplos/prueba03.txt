@@ -1,0 +1,4 @@
+Uno
+Dos tres y cuatro
+Cinco
+Primera línea del ficheroPrimera línea del fichero
