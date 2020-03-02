@@ -8,6 +8,8 @@ Usaremos la API de themoviedb.org
 Para los géneros de las películas: https://developers.themoviedb.org/3/genres/get-movie-list
 
 Para el "trending topic": https://developers.themoviedb.org/3/trending/get-trending
+
+REVISAR FUNCIÓN MOSTRAR_TRENDING_FILTRO
 """
 
 # Funciones a utilizar en el programa
@@ -43,6 +45,60 @@ def lanzar_consulta (rango, page_actual):
     parametros = {'api_key': key, 'language': language, 'page': page}
     return requests.get(rango, params=parametros)
 
+def semanal_diario ():
+    rango_elegido = (f'Deseas ver las películas trending topic "semanal" ó "diario": ')
+    while rango_elegido != "semanal" and rango_elegido != "SEMANAL" and rango_elegido != "diario" and rango_elegido != "DIARIO":
+        print(f'Valor introducido incorrecto.')
+        rango_elegido = input(f'Señala que rango deseas ver: "semanal" ó "diario": ')
+    if rango_elegido == "SEMANAL" or "semanal":
+        rango_elegido = "semanal"
+    else:
+        rango_elegido = "diario"
+    return rango_elegido
+
+def general_especifico ():
+    tipo = input(f'¿Deseas ver el listado completo o de algún género específico? (general / especifico): ')
+    while tipo != "general" and tipo != "GENERAL" and tipo != "especifico" and tipo != "ESPECIFICO":
+        tipo = input(f'Valor introducido incorrecto. \n'
+                     f'¿Deseas ver el listado completo o de algún género específico? \n'
+                     f'(general / especifico)')
+    if tipo == "general" or tipo == "GENERAL":
+        tipo = "general"
+    else:
+        tipo = "especifico"
+    return tipo
+
+def mostrar_generos (contenido_generos):
+    # Lectura del listado de los géneros.
+    contador = 0
+    for valor in contenido_generos['genres']:
+        if contador < 6:
+            print(f'{valor["name"]} ', end="")
+            contador += 1
+        else:
+            print(f'\n{valor["name"]} ', end="")
+            contador = 0
+
+def elige_genero (contenido_generos):
+    genero = input(f'\nElige el género: ')
+    genero_correcto = False
+    for valor in contenido_generos['genres']:
+        if valor['name'] == genero:
+            genero_correcto = True
+    while genero_correcto == False:
+        genero = input(f'Género incorrecto, vuelve a introducirlo: ')
+        for valor in contenido_generos['genres']:
+            if valor['name'] == genero:
+                genero_correcto = True
+    return genero
+
+def busqueda_genero (contenido_generos, genero):
+    # búsqueda del id para el género.
+    for valor in contenido_generos['genres']:
+        if valor['name'] == genero:
+            id_genero = valor['id']
+    return id_genero
+
 import requests
 import os
 
@@ -64,101 +120,32 @@ respuesta_dia = lanzar_consulta(url_movies_dia,1)
 respuesta_semanal = lanzar_consulta(url_movies_semanal,1)
 respuesta_generos = lanzar_consulta(url_generos,1)
 
-# Lectura del listado de los géneros.
-contenido_generos = respuesta_generos.json()
-contador = 0
-lista_generos =""
-for valor in contenido_generos['genres']:
-    if contador < 6:
-        lista_generos += valor["name"], ', end=""'
-        contador += 1
-    else:
-        lista_generos += "\n",valor["name"], ', end=""'
-        contador = 0
-
 if respuesta_dia.status_code == 200:
     contenido_dia = respuesta_dia.json()    # pasamos contenido a un diccionario
     contenido_semanal = respuesta_semanal.json()
+    contenido_generos = respuesta_generos.json()
 
 # Comenzamos a presentar el programa y petición de parámetros por pantalla.
+mostrar_trending_filtro(contenido_dia, "Acción",url_movies_dia)
+
 print(f'Con esta aplicación podrás obtener un listado con las 5 películas "trending topic".')
-rango_elegido = input(f'Señala que rango deseas ver: "semanal" ó "diario": ')
+print(f'-----------------------------------------------------------------------------------')
 
-while  rango_elegido != "semanal" and rango_elegido != "SEMANAL" and rango_elegido != "diario" and rango_elegido != "DIARIO":
-    print(f'Valor introducido incorrecto.')
-    rango_elegido = input(f'Señala que rango deseas ver: "semanal" ó "diario": ')
+# Pedimos la periodicidad de la búsqueda:
+rango_elegido = semanal_diario()
+tipo = general_especifico()
 
-if rango_elegido == "semanal" or rango_elegido == "SEMANAL":
-    tipo = input(f'¿Deseas ver el listado completo o de algún género específico? (general / especifico)')
-    while tipo != "general" and "GENERAL" and "especifico" and "ESPECIFICO":
-        tipo = input(f'Valor introducido incorrecto. \n'
-                     f'¿Deseas ver el listado completo o de algún género específico? \n'
-                     f'(general / especifico)')
-    if tipo == "general" or "GENERAL":
-        # Mostramos trending topic semanal sin filtro
-        print(f'\nMostramos las películas "trending topic" semanal:')
-        mostrar_trending(contenido_semanal)
-    else:
-
-
-        genero = input(f'\nElige el género: ')
-
-        # búsqueda del id para el género.
-        for valor in contenido_generos['genres']:
-            if valor['name'] == genero:
-                id_genero = valor['id']
-        print(id_genero)
-
-    else:
-        tipo = input(f'¿Deseas ver el listado completo o de algún género específico? (general / especifico)')
-        while not tipo == "general" or "GENERAL" or "especifico" or "ESPECIFICO":
-            tipo = input(f'Valor introducido incorrecto. \n'
-                         f'¿Deseas ver el listado completo o de algún género específico? \n'
-                         f'(general / especifico)')
-        if tipo == "general" or "GENERAL":
-            # Mostramos trending topic hoy sin filtro
-            print(f'\nMostramos las películas "trending topic" semanal:')
-            mostrar_trending(contenido_semanal)
-
-elif rango_elegido == "diario" or rango_elegido == "DIARIO":
-    tipo = input(f'¿Deseas ver el listado completo o de algún género específico? (general / especifico)')
-    while tipo != "general" and "GENERAL" and "especifico" and "ESPECIFICO":
-        tipo = input(f'Valor introducido incorrecto. \n'
-                     f'¿Deseas ver el listado completo o de algún género específico? \n'
-                     f'(general / especifico)')
-    if tipo == "general" or "GENERAL":
-        # Mostramos trending topic semanal sin filtro
-        print(f'\nMostramos las películas "trending topic" de hoy:')
-        mostrar_trending(contenido_semanal)
-    else:
-        tipo = input(f'¿Deseas ver el listado completo o de algún género específico? (general / especifico)')
-        while not tipo == "general" or "GENERAL" or "especifico" or "ESPECIFICO":
-            tipo = input(f'Valor introducido incorrecto. \n'
-                         f'¿Deseas ver el listado completo o de algún género específico? \n'
-                         f'(general / especifico)')
-        if tipo == "general" or "GENERAL":
-            # Mostramos trending topic hoy sin filtro
-            print(f'\nMostramos las películas "trending topic" de hoy:')
-            mostrar_trending_filtro(contenido_dia,1)
-
-
-
-opcion = input(f'Con esta aplicación podrás obtener un listado con las 5 películas "trending topic" \n'
-               f'semanal o diario según el género de la película o completo. ¿Deseas ver un listado general? (S/N)')
-
-print(f'\n¿Quiéres ver algún género en concreto? Elige entre el listado de géneros disponibles:\n'
-      f'(Escribe el género exactamente como aparece, se distinguen entre mayúsculas y minúsculas)')
-
-
-
-
-
-# Si la opción es N ó n, realizar la muestra del listado de géneros y su id.
-
-# Mostramos trending topic de hoy con filtro
-print(f'\nMostramos las películas "trending topic" de hoy del género {genero}:')
-mostrar_trending_filtro(contenido_dia,id_genero, url_movies_dia)
-
-# Mostramos trending topic semanal con filtro
-print(f'\nMostramos las películas "trending topic" semanal del género "{genero}":')
-mostrar_trending_filtro(contenido_semanal, id_genero, url_movies_semanal)
+if tipo == "general" and rango_elegido == "diario":
+    mostrar_trending(contenido_dia)
+elif tipo == "general" and rango_elegido == "semanal":
+    mostrar_trending(contenido_semanal)
+elif tipo == "especifico" and rango_elegido == "diario":
+    print(f'Géneros disponibles: ')
+    mostrar_generos(contenido_generos)
+    genero = elige_genero(contenido_generos)
+    mostrar_trending_filtro(contenido_dia, genero,url_movies_dia)
+else:
+    print(f'Géneros disponibles: ')
+    mostrar_generos(contenido_generos)
+    genero = elige_genero(contenido_generos)
+    mostrar_trending_filtro(contenido_semanal, genero, url_movies_semanal)
