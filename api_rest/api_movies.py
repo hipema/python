@@ -84,13 +84,14 @@ def elige_genero (contenido_generos):
     genero_correcto = False
     for valor in contenido_generos['genres']:
         if valor['name'] == genero:
+            id_genero = busqueda_genero(contenido_generos, genero)
             genero_correcto = True
     while genero_correcto == False:
         genero = input(f'Género incorrecto, vuelve a introducirlo: ')
         for valor in contenido_generos['genres']:
             if valor['name'] == genero:
                 genero_correcto = True
-    return genero
+    return id_genero
 
 def busqueda_genero (contenido_generos, genero):
     # búsqueda del id para el género.
@@ -126,8 +127,6 @@ if respuesta_dia.status_code == 200:
     contenido_generos = respuesta_generos.json()
 
 # Comenzamos a presentar el programa y petición de parámetros por pantalla.
-mostrar_trending_filtro(contenido_dia, "Acción",url_movies_dia)
-
 print(f'Con esta aplicación podrás obtener un listado con las 5 películas "trending topic".')
 print(f'-----------------------------------------------------------------------------------')
 
