@@ -57,8 +57,9 @@ for medicion in datos['list']:
 print()
 for dia,temps in dias.items(): # recorremos los pares (dia para recorrer las claves, temps para recorrer los valores) items (recorre los pares)
     #\t --> realiza un tabulador - sum --> calcula el máximo de la lista - min --> calcula el mínimo de la lista
-    print(f'Día {dia[8:]}-{dia[5:7]}-{dia[0:4]}: \tTemperatura media: {(sum(temps["temp"])/len(temps["temp"])):.2f}º,'
-          f'mínima: {min(temps["temp_min"])}º y máxima {max(temps["temp_max"])}º')
+    print(f'Día {dia[8:]}-{dia[5:7]}-{dia[0:4]}: \tTemperatura media: {(sum(temps["temp"])/len(temps["temp"])):.2f}º\t'
+          f'mínima: {min(temps["temp_min"])}º  \tmáxima {max(temps["temp_max"])}º. \t'
+          f'Mediciones: {len(temps["temp"])}')
 print()
 print(f'TOTALES:\t\tTemperatura media: {(sum(totales["temp"])/len(totales["temp"])):.2f}º,'
       f'mínima: {min(totales["temp_min"])}º y máxima: {max(totales["temp_max"])}')
