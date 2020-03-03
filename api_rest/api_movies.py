@@ -110,10 +110,10 @@ url_movies_semanal = "https://api.themoviedb.org/3/trending/movie/week"
 url_generos = "https://api.themoviedb.org/3/genre/movie/list"
 
 # Parámetros
-key = "67e26925bd2c561a1b08002e63c8044a"
+#key = "67e26925bd2c561a1b08002e63c8044a"
 language = "es-ES"
 page = 1
-#key = os.getenv('$THEMOVIEDB', 'Id no encontrada')
+key = os.environ['MOVIEDB']
 parametros = {'api_key':key, 'language':language, 'page':page}
 
 # petición
