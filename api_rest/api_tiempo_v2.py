@@ -36,9 +36,8 @@ from datetime import datetime
 url = "http://api.openweathermap.org/data/2.5/forecast"
 # Parámetros
 ciudad = input(f'Introduce la ciudad que deseas buscar: ')
-#key = "56e22addb36fca28311139f89294b092"
-# Para crear la variable de entorno, vamos a "Run/Edit Cofigurations/Enviroment" y ahí añadimos el valor.
-key = os.environ['OPENWEATHERID']
+key = "56e22addb36fca28311139f89294b092"
+#key = os.getenv('$OPENWEATHERID', 'Id no encontrada')
 parametros = {'q':ciudad, 'appid':key, 'units':'metric'}
 
 # petición
