@@ -46,7 +46,7 @@ def lanzar_consulta (rango, page_actual):
     return requests.get(rango, params=parametros)
 
 def semanal_diario ():
-    rango_elegido = (f'Deseas ver las películas trending topic "semanal" ó "diario": ')
+    rango_elegido = input(f'Deseas ver las películas trending topic "semanal" ó "diario": ')
     while rango_elegido != "semanal" and rango_elegido != "SEMANAL" and rango_elegido != "diario" and rango_elegido != "DIARIO":
         print(f'Valor introducido incorrecto.')
         rango_elegido = input(f'Señala que rango deseas ver: "semanal" ó "diario": ')
