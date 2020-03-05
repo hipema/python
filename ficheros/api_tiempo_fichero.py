@@ -1,4 +1,12 @@
 """
+
+ARCHIVO PENDIENTE DE MODIFICAR.
+UTILIZAR import sys
+ para que quede algo así como api_tiempo_fichero.py ____ ____ ____
+ if len(sys.argv)....
+
+ Ver enlace de "pasar argumentos a python" de moodle.
+
 1. Modifica el ejercicio 1 del tema anterior de manera que:
 
 El programa admita dos parámetros:
@@ -70,27 +78,32 @@ def mostrar_ayuda():
           f'- En el segunda parámetro, incluya la dirección donde desee guardar el archivo html donde se incluirá\n'
           f'  la información de las mediciones. Si no incluye ninguna dirección, la información se mostrará\n'
           f'  directamente en pantalla.\n')
-    input('Pulse "Intro" para continuar con el programa')
+    input('Pulse "Intro" para terminar con el programa')
 
 import requests
 import os
-from datetime import datetime
+import sys
 
 # datos para hacer la petición
 # Endpoint
 url = "http://api.openweathermap.org/data/2.5/forecast"
 # Parámetros
-key = os.environ['OPENWEATHERID']
-#key = "56e22addb36fca28311139f89294b092"
+#key = os.environ['OPENWEATHERID']
+key = "56e22addb36fca28311139f89294b092"
 # Para crear la variable de entorno, vamos a "Run/Edit Cofigurations/Enviroment" y ahí añadimos el valor.
+if (len(sys.argv) == 1 or len(sys.argv)>3):
+    ciudad = ""
+elif len(sys.argv) == 3:
+    ciudad = sys.argv[1]
+    directorio = sys.argv[2]
+else:
+    ciudad = sys.argv[1]
+    directorio =""
 try:
-    ciudad = "-h"
-    while ciudad == "-h":
-        ciudad = input(f'Introduce la ciudad que deseas buscar: ')
-        parametros = {'q': ciudad, 'appid': key, 'units': 'metric'}
-        respuesta = requests.get(url, params=parametros)
-        if ciudad == "-h":
-            mostrar_ayuda()
+    parametros = {'q': ciudad, 'appid': key, 'units': 'metric'}
+    respuesta = requests.get(url, params=parametros)
+    if ciudad == "-h":
+        mostrar_ayuda()
     if ciudad == "":
         raise Sintaxis_incorrecta ()
     if respuesta.status_code != 200:
@@ -106,8 +119,6 @@ except Sintaxis_incorrecta:
 # Petición del segundo parámetro
 
 try:
-    directorio = input(f'Indica el directorio en el que deseas guardar el archivo.\n'
-                       f'Deja vacío y Pulsa Intro para mostrar en pantalla.\n')
     existe_directorio = os.path.isdir('github/ficheros/temperaturas/'+directorio)
     if not existe_directorio:
         os.mkdir('github/ficheros/temperaturas/'+directorio)
