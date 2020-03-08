@@ -1,12 +1,4 @@
 """
-
-ARCHIVO PENDIENTE DE MODIFICAR.
-UTILIZAR import sys
- para que quede algo así como api_tiempo_fichero.py ____ ____ ____
- if len(sys.argv)....
-
- Ver enlace de "pasar argumentos a python" de moodle.
-
 1. Modifica el ejercicio 1 del tema anterior de manera que:
 
 El programa admita dos parámetros:
