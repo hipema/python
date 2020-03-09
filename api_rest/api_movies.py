@@ -90,6 +90,7 @@ def elige_genero (contenido_generos):
         genero = input(f'Género incorrecto, vuelve a introducirlo: ')
         for valor in contenido_generos['genres']:
             if valor['name'] == genero:
+                id_genero = busqueda_genero(contenido_generos, genero)
                 genero_correcto = True
     return id_genero
 
