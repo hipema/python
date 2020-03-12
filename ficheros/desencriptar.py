@@ -43,9 +43,9 @@ def desencriptar_fichero(file_read, file_write):
     #for i in range (posicion):
     i=0
     while i < len(lectura):
-        print("posicion total: ", len(lectura)-1)
-        print("posicion de i: ", i)
-        print(lectura[i])
+        #print("posicion total: ", len(lectura)-1)
+        #print("posicion de i: ", i)
+        #print(lectura[i])
         if lectura[i] in diccionario_principal:
             indice = diccionario_principal.index(lectura[i])
             if (indice+clave)>= 0:
