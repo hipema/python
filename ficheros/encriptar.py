@@ -54,9 +54,6 @@ def encriptar_fichero(file_read, file_write):
     f.close()
     print("Archivo encriptado correctamente.")
 
-
-import requests
-import os
 import sys
 try:
     if (len(sys.argv) == 2):
