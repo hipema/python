@@ -28,8 +28,6 @@ def encripta_cesar(cadena, desplazamiento):
             # esta función sustituiría a la habitual que venía utilizando en las líneas 45 y siguientes de la versión 1.
             # es más efectiva, ya que si pones una clave muy grande no da error.
             posicion_caracter_encriptado = (posicion_donde_esta + desplazamiento) % len(letras)
-            if posicion_caracter_encriptado < 0:
-                posicion_caracter_encriptado = len(letras) + posicion_caracter_encriptado
             caracter_encriptado = letras[posicion_caracter_encriptado]
         else:
             caracter_encriptado = caracter
@@ -94,8 +92,8 @@ except PermissionError or FileNotFoundError:
     print("No se ha podido abrir para escritura.", fichero_destino)
     exit(2)
 
-# Desencriptamos y escribimos.
+# Encriptamos y escribimos.
 for linea in origen:
     manejador_destino.write(encripta_cesar(linea, -desplazamiento))
-print(f"Archivo desencriptado correctamente.")
+print(f"Archivo encriptado correctamente.")
 manejador_destino.close()
